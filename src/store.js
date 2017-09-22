@@ -5,6 +5,8 @@ import {
   compose
 } from 'redux'
 import { routerReducer } from 'react-router-redux'
+import { persistStore, autoRehydrate } from 'redux-persist'
+
 
 import createMiddleware from './middleware'
 import routerMiddleware from './routerMiddleware'
@@ -33,10 +35,10 @@ export function createStore(models, reducers, initialState, middlewares = []) {
   }
 
   const reducer = createReducer(models, reducers)
-  const enhancer = composeEnhancers(...enhancers)
+  const enhancer = composeEnhancers(...enhancers, autoRehydrate())
 
   store = _createStore(reducer, initialState, enhancer)
-
+  persistStore(store)
   return store
 }
 
